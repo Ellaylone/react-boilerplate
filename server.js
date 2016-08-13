@@ -6,13 +6,14 @@ let config = require('./webpack.config')
 let app = new (require('express'))()
 
 app.set('port', (process.env.PORT || 5000))
+app.set('src', path.join(__dirname, 'src'))
 
 let compiler = webpack(config)
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
 app.use(webpackHotMiddleware(compiler))
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+  res.sendFile(path.join(app.get('src'), 'index.html'))
 })
 
 app.listen(app.get('port'), error => {
